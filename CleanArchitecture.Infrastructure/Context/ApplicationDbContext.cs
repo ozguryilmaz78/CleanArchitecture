@@ -22,6 +22,7 @@ namespace CleanArchitecture.Infrastructure.Context
             builder.Ignore<IdentityUserToken<Guid>>();
             builder.Ignore<IdentityUserRole<Guid>>();
             builder.Ignore<IdentityUserClaim<Guid>>();
+            builder.Entity<UserRole>().HasNoKey();
 
         }
 
