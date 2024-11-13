@@ -3,7 +3,7 @@ using CleanArchitecture.Domain.Entities.Auth;
 using CleanArchitecture.Infrastructure.Context;
 using CleanArchitecture.Infrastructure.Options;
 using CleanArchitecture.Infrastructure.Services;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.Role;
+using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +34,7 @@ namespace CleanArchitecture.Infrastructure
             services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
 
             // Identity ayarlarını yapılandırma
-            services.AddIdentity<User, RoleDomain>(cfr =>
+            services.AddIdentity<AppUser, RoleDomain>(cfr =>
             {
                 cfr.Password.RequiredLength = 8;
                 cfr.Password.RequireNonAlphanumeric = true;

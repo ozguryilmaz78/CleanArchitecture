@@ -7,11 +7,11 @@ namespace CleanArchitecture.Application.Features.Auth.GetAll
 {
     public class GetAllQueryHandler : IRequestHandler<GetAllQuery, Result<List<GetAllQueryResponse>>>
     {
-        private readonly IRepository<User> _repository;
+        private readonly IRepository<AppUser> _repository;
         private readonly IMapper _mapper;
 
         public GetAllQueryHandler(
-            IRepository<User> repository,
+            IRepository<AppUser> repository,
             IMapper mapper)
         {
             _repository = repository;

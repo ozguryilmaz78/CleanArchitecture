@@ -128,6 +128,7 @@ namespace CleanArchitecture.WebAPI.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AssignRole(AssignCommand request, CancellationToken cancellationToken)
         {

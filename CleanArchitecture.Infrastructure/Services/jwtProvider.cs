@@ -17,10 +17,10 @@ using System.Threading.Tasks;
 namespace CleanArchitecture.Infrastructure.Services
 {
     public class JwtProvider(
-        UserManager<User> userManager,
+        UserManager<AppUser> userManager,
         IOptions<JwtOptions> jwtOptions) : IJwtProvider
     {
-        public async Task<LoginCommandResponse> CreateToken(User user)
+        public async Task<LoginCommandResponse> CreateToken(AppUser user)
         {
             List<Claim> claims = new()
             {
@@ -58,7 +58,7 @@ namespace CleanArchitecture.Infrastructure.Services
             return new(token, refreshToken, refreshTokenExpires);
         }
 
-        public async Task<EmailConfirmationCommandResponse> CreateEmailConfirmationToken(User user)
+        public async Task<EmailConfirmationCommandResponse> CreateEmailConfirmationToken(AppUser user)
         {
             List<Claim> claims = new()
             {

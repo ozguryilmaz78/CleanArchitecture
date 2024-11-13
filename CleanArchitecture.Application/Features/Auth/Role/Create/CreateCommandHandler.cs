@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.Role;
+using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
 
 
 namespace CleanArchitecture.Application.Features.Auth.Role.Create

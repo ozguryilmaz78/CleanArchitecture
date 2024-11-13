@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Services;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.Role;
+using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

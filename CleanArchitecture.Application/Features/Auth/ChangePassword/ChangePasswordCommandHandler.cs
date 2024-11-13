@@ -10,14 +10,14 @@ namespace CleanArchitecture.Application.Features.Auth.ChangePassword
 {
     public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, Result<ChangePasswordCommandResponse>>
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IJwtProvider _jwtProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public ChangePasswordCommandHandler(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
             IJwtProvider jwtProvider,
             IHttpContextAccessor httpContextAccessor)
         {

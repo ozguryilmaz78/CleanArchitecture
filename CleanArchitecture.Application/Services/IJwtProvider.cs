@@ -11,7 +11,7 @@ namespace CleanArchitecture.Application.Services
 {
     public interface IJwtProvider
     {
-        Task<LoginCommandResponse> CreateToken(User user);
-        Task<EmailConfirmationCommandResponse> CreateEmailConfirmationToken(User user);
+        Task<LoginCommandResponse> CreateToken(AppUser user);
+        Task<EmailConfirmationCommandResponse> CreateEmailConfirmationToken(AppUser user);
     }
 }

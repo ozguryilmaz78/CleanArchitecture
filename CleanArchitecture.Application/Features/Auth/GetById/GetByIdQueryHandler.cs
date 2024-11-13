@@ -7,10 +7,10 @@ namespace CleanArchitecture.Application.Features.Auth.GetById
 {
     public class GetByIdQueryHandler : IRequestHandler<GetByIdQuery, Result<GetByIdQueryResponse>>
     {
-        private readonly IRepository<User> _repository;
+        private readonly IRepository<AppUser> _repository;
         private readonly IMapper _mapper;
 
-        public GetByIdQueryHandler(IRepository<User> repository, IMapper mapper)
+        public GetByIdQueryHandler(IRepository<AppUser> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Domain.Entities.Auth
 {
-    public class UserRole: IdentityUserRole<Guid>
+    public class AppUserRole: IdentityUserRole<Guid>
     {
-        public string UserId {  get; set; }
-        public string RoleId { get; set; }
+        public virtual AppUser User { get; set; }
+        public virtual AppRole Role { get; set; }
     }
 }

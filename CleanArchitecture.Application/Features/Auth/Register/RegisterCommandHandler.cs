@@ -9,12 +9,12 @@ namespace CleanArchitecture.Application.Features.Auth.Register
 {
     public partial class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterCommandResponse>>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IEmailService _emailService;
         private readonly IJwtProvider _jwtProvider;
 
         public RegisterCommandHandler(
-            UserManager<User> userManager,
+            UserManager<AppUser> userManager,
             IJwtProvider jwtProvider,
             IEmailService emailService)
         {
@@ -25,7 +25,7 @@ namespace CleanArchitecture.Application.Features.Auth.Register
 
         public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            User? user = await _userManager.Users
+            AppUser? user = await _userManager.Users
                         .FirstOrDefaultAsync(p =>
                         p.UserName == request.UserName ||
                         p.Email == request.Email,
@@ -36,7 +36,7 @@ namespace CleanArchitecture.Application.Features.Auth.Register
                 return (500, "Kullanıcı adı veya email sistemde kayıtlı.");
             }
 
-            user = new User
+            user = new AppUser
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,

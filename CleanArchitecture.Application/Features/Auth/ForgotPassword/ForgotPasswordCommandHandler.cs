@@ -11,14 +11,14 @@ namespace CleanArchitecture.Application.Features.Auth.ForgotPassword
 {
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, Result<ForgotPasswordCommandResponse>>
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IJwtProvider _jwtProvider;
         private readonly IEmailService _emailService;
 
         public ForgotPasswordCommandHandler(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
             IJwtProvider jwtProvider,
             IEmailService emailService)
         {
@@ -30,7 +30,7 @@ namespace CleanArchitecture.Application.Features.Auth.ForgotPassword
 
         public async Task<Result<ForgotPasswordCommandResponse>> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
-            User? user = await _userManager.Users
+            AppUser? user = await _userManager.Users
                          .FirstOrDefaultAsync(p =>
                          p.UserName == request.EmailOrUserName ||
                          p.Email == request.EmailOrUserName,
@@ -41,7 +41,7 @@ namespace CleanArchitecture.Application.Features.Auth.ForgotPassword
                 return (500, "Kullanıcı bulunamadı.");
             }
             string newPassword = GenerateRandomPassword();
-            var passwordHasher = new PasswordHasher<User>();
+            var passwordHasher = new PasswordHasher<AppUser>();
             user.PasswordHash = passwordHasher.HashPassword(user, newPassword);
             var result = await _userManager.UpdateAsync(user);
 

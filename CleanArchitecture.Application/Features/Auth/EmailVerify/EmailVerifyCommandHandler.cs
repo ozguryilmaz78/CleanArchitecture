@@ -8,9 +8,9 @@ namespace CleanArchitecture.Application.Features.Auth.EmailVerify
 {
     public class EmailVerifyCommandHandler : IRequestHandler<EmailVerifyCommand, Result<EmailVerifyCommandResponse>>
     {
-        private readonly IRepository<User> _repository;
+        private readonly IRepository<AppUser> _repository;
 
-        public EmailVerifyCommandHandler(IRepository<User> repository, IConfiguration configuration)
+        public EmailVerifyCommandHandler(IRepository<AppUser> repository, IConfiguration configuration)
         {
             _repository = repository;
         }

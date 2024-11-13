@@ -13,13 +13,13 @@ namespace CleanArchitecture.Application.Features.Auth.Login
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>
     {
-        private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
+        private readonly UserManager<AppUser> userManager;
+        private readonly SignInManager<AppUser> signInManager;
         private readonly IJwtProvider jwtProvider;
 
         public LoginCommandHandler(
-            UserManager<User> _userManager, 
-            SignInManager<User> _signInManager,
+            UserManager<AppUser> _userManager, 
+            SignInManager<AppUser> _signInManager,
             IJwtProvider _jwtProvider)
         {
             userManager = _userManager;
@@ -29,7 +29,7 @@ namespace CleanArchitecture.Application.Features.Auth.Login
 
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            User? user = await userManager.Users
+            AppUser? user = await userManager.Users
                          .FirstOrDefaultAsync(p =>
                          p.UserName == request.EmailOrUserName ||
                          p.Email == request.EmailOrUserName,

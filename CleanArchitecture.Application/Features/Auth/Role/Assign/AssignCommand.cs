@@ -10,7 +10,7 @@ namespace CleanArchitecture.Application.Features.Auth.Role.Assign
 {
     public class AssignCommand : IRequest<Result<AssignCommandResponse>>
     {
-        public string UserId { get; set; }
-        public string RoleId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid RoleId { get; set; }
     }
 }

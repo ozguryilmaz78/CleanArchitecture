@@ -2,6 +2,7 @@
 using CleanArchitecture.Application.Features.Auth.GetAll;
 using CleanArchitecture.Application.Features.Auth.GetById;
 using CleanArchitecture.Application.Features.Auth.Register;
+using CleanArchitecture.Application.Features.Auth.Role.Assign;
 using CleanArchitecture.Application.Features.Auth.Role.Update;
 using CleanArchitecture.Domain.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -12,12 +13,14 @@ namespace CleanArchitecture.Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<User, GetAllQueryResponse>();
-            CreateMap<User, GetByIdQueryResponse>();
+            CreateMap<AppUser, GetAllQueryResponse>();
+            CreateMap<AppUser, GetByIdQueryResponse>();
+            CreateMap<AppUser, AssignCommandResponse>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src));
             CreateMap<IdentityUser, RegisterCommandResponse>();
-            CreateMap<Role, GetAllQueryResponse>();
-            CreateMap<Role, GetByIdQueryResponse>();
-            CreateMap<Role, UpdateCommandResponse>();
+            CreateMap<AppRole, GetAllQueryResponse>();
+            CreateMap<AppRole, GetByIdQueryResponse>();
+            CreateMap<AppRole, UpdateCommandResponse>();
 
         }
     }
