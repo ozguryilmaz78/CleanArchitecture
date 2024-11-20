@@ -1,9 +1,9 @@
 ﻿using CleanArchitecture.Application.Services;
 using MediatR;
 
-namespace CleanArchitecture.Application.Features.Auth.Role.Update
+namespace CleanArchitecture.Application.Features.Auth.Role.UpdateRole
 {
-    public class UpdateCommand : IRequest<Result<UpdateCommandResponse>>
+    public class UpdateRoleCommand : IRequest<Result<UpdateRoleCommandResponse>>
     {
         public string Id { get; set; }
         public string Name { get; set; }

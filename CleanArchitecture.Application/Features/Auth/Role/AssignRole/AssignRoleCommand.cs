@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Features.Auth.Role.Assign
+namespace CleanArchitecture.Application.Features.Auth.Role.AssignRole
 {
-    public class AssignCommand : IRequest<Result<AssignCommandResponse>>
+    public class AssignRoleCommand : IRequest<Result<AssignRoleCommandResponse>>
     {
         public Guid UserId { get; set; }
         public Guid RoleId { get; set; }

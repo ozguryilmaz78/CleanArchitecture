@@ -25,40 +25,49 @@ namespace CleanArchitecture.Application.Features.Auth.Register
 
         public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            AppUser? user = await _userManager.Users
-                        .FirstOrDefaultAsync(p =>
-                        p.UserName == request.UserName ||
-                        p.Email == request.Email,
-                        cancellationToken);
-
-            if (user != null)
+            try
             {
-                return (500, "Kullanıcı adı veya email sistemde kayıtlı.");
+                AppUser? user = await _userManager.Users
+                            .FirstOrDefaultAsync(p =>
+                            p.UserName == request.UserName ||
+                            p.Email == request.Email,
+                            cancellationToken);
+
+                if (user != null)
+                {
+                    return (500, "Kullanıcı adı veya email sistemde kayıtlı.");
+                }
+
+                user = new AppUser
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    FullName = request.FirstName + " " + request.LastName,
+                    UserName = request.UserName,
+                    Email = request.Email,
+                };
+                var emailResponse = await _jwtProvider.CreateEmailConfirmationToken(user);
+                user.EmailConfirmationCode = emailResponse.Token;
+                var result = await _userManager.CreateAsync(user, request.Password);
+
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    return Result<RegisterCommandResponse>.Failure(500, $"Kayıt başarısız: {errors}");
+                }
+
+                var response = new RegisterCommandResponse
+                {
+                    Id = user.Id.ToString()
+                };
+                await _emailService.SendEmailConfirmationAsync(request.Email, emailResponse.Token);
+                return Result<RegisterCommandResponse>.Succeed(response);
             }
-
-            user = new AppUser
+            catch (Exception ex)
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.UserName,
-                Email = request.Email,
-            };
-            var emailResponse = await _jwtProvider.CreateEmailConfirmationToken(user);
-            user.EmailConfirmationCode = emailResponse.Token;
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                return Result<RegisterCommandResponse>.Failure(500, $"Kayıt başarısız: {errors}");
+                Console.WriteLine(ex.InnerException?.Message ?? ex.Message);
+                throw;
             }
-
-            var response = new RegisterCommandResponse
-            {
-                Id = user.Id.ToString()
-            };
-            await _emailService.SendEmailConfirmationAsync(request.Email, emailResponse.Token);
-            return Result<RegisterCommandResponse>.Succeed(response);
         }
     }
 }

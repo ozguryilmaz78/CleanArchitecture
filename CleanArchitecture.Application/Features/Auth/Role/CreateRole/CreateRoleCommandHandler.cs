@@ -4,21 +4,21 @@ using Microsoft.AspNetCore.Identity;
 using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
 
 
-namespace CleanArchitecture.Application.Features.Auth.Role.Create
+namespace CleanArchitecture.Application.Features.Auth.Role.CreateRole
 {
-    public class CreateCommandHandler : IRequestHandler<CreateCommand, Result<CreateCommandResponse>>
+    public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Result<CreateRoleCommandResponse>>
     {
         private readonly RoleManager<RoleDomain> _repository;
 
-        public CreateCommandHandler(RoleManager<RoleDomain> repository)
+        public CreateRoleCommandHandler(RoleManager<RoleDomain> repository)
         {
             _repository = repository;
         }
 
-        public async Task<Result<CreateCommandResponse>> Handle(CreateCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CreateRoleCommandResponse>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
             var role = await _repository.RoleExistsAsync(request.Name);
-            if (role == true) return Result<CreateCommandResponse>.Failure("Bu isimde bir rol zaten mevcut.");
+            if (role == true) return Result<CreateRoleCommandResponse>.Failure("Bu isimde bir rol zaten mevcut.");
             var newRole = new RoleDomain
             {
                 Name = request.Name,
@@ -30,10 +30,10 @@ namespace CleanArchitecture.Application.Features.Auth.Role.Create
             var result = await _repository.CreateAsync(newRole);
             if (!result.Succeeded)
             {
-                return Result<CreateCommandResponse>.Failure(500, $"Kayıt başarısız.");
+                return Result<CreateRoleCommandResponse>.Failure(500, $"Kayıt başarısız.");
             }
 
-            return Result<CreateCommandResponse>.Succeed(new CreateCommandResponse
+            return Result<CreateRoleCommandResponse>.Succeed(new CreateRoleCommandResponse
             {
                 Name = newRole.Name,
                 NormalizedName = newRole.Name.ToUpper(),

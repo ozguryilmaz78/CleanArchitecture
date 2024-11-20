@@ -6,14 +6,17 @@ using CleanArchitecture.Application.Features.Auth.GetAll;
 using CleanArchitecture.Application.Features.Auth.GetById;
 using CleanArchitecture.Application.Features.Auth.Login;
 using CleanArchitecture.Application.Features.Auth.Register;
-using CleanArchitecture.Application.Features.Auth.Role.Assign;
-using CleanArchitecture.Application.Features.Auth.Role.Create;
-using CleanArchitecture.Application.Features.Auth.Role.Delete;
-using CleanArchitecture.Application.Features.Auth.Role.Update;
+using CleanArchitecture.Application.Features.Auth.Role.AssignRole;
+using CleanArchitecture.Application.Features.Auth.Role.CreateRole;
+using CleanArchitecture.Application.Features.Auth.Role.DeleteRole;
+using CleanArchitecture.Application.Features.Auth.Role.GetAllRole;
+using CleanArchitecture.Application.Features.Auth.Role.GetByIdRole;
+using CleanArchitecture.Application.Features.Auth.Role.UpdateRole;
 using CleanArchitecture.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebAPI.Controllers
 {
@@ -94,43 +97,43 @@ namespace CleanArchitecture.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRole(CreateCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateRole(CreateRoleCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateRole(UpdateCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateRole(UpdateRoleCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteRole(DeleteCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteRole(DeleteRoleCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllRoles(GetAllQuery request, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllRoles(GetAllRoleQuery request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetByIdRole(GetByIdQuery request, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByIdRole(GetByIdRoleQuery request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
 
-        [AllowAnonymous]
+
         [HttpPost]
-        public async Task<IActionResult> AssignRole(AssignCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AssignRole(AssignRoleCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);

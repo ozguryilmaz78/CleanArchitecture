@@ -1,6 +1,6 @@
-﻿namespace CleanArchitecture.Application.Features.Auth.Role.Create
+﻿namespace CleanArchitecture.Application.Features.Auth.Role.CreateRole
 {
-    public class CreateCommandResponse
+    public class CreateRoleCommandResponse
     {
         public string Id { get; set; }
         public string Name { get; set; }

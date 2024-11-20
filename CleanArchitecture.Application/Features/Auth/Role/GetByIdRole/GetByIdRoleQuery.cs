@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Features.Auth.Role.GetById
+namespace CleanArchitecture.Application.Features.Auth.Role.GetByIdRole
 {
-    public class GetByIdQuery : IRequest<Result<GetByIdQueryResponse>>
+    public class GetByIdRoleQuery : IRequest<Result<GetByIdRoleQueryResponse>>
     {
         public string Id { get; set; }
     }

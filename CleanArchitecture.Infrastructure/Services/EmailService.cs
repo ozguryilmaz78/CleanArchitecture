@@ -45,7 +45,7 @@ namespace CleanArchitecture.Infrastructure.Services
             message.From = new MailAddress(_configuration["EmailSettings:From"]);
             message.To.Add(new MailAddress(toEmail));
             message.IsBodyHtml = bool.Parse(_configuration["EmailSettings:IsBodyHtml"]);
-            message.Subject = "Email Onayı";
+            message.Subject = "E-posta Onayı";
             message.Body =
             $"<!DOCTYPE html>" +
             $"<html lang=\"tr\">" +

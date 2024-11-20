@@ -1,6 +1,6 @@
-﻿namespace CleanArchitecture.Application.Features.Auth.Role.GetById
+﻿namespace CleanArchitecture.Application.Features.Auth.Role.UpdateRole
 {
-    public class GetByIdQueryResponse
+    public class UpdateRoleCommandResponse
     {
         public string Name { get; set; } = string.Empty;
         public string NormalizedName { get; set; } = string.Empty;
