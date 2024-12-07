@@ -1,21 +1,17 @@
-﻿using AutoMapper;
-using CleanArchitecture.Application.Features.Auth.EmailVerify;
-using CleanArchitecture.Application.Features.Auth.Role.AssignRole;
-using CleanArchitecture.Application.Services;
+﻿using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
 
 
 namespace CleanArchitecture.Application.Features.Auth.Role.DeleteRole
 {
     public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, Result<DeleteRoleCommandResponse>>
     {
-        private readonly RoleManager<RoleDomain> _repository;
+        private readonly RoleManager<AppRole> _repository;
         private readonly UserManager<AppUser> _userManager;
 
-        public DeleteRoleCommandHandler(RoleManager<RoleDomain> repository, UserManager<AppUser> userManager)
+        public DeleteRoleCommandHandler(RoleManager<AppRole> repository, UserManager<AppUser> userManager)
         {
             _repository = repository;
             _userManager = userManager;

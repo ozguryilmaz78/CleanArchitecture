@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Domain.Entities.Auth
 {
-    public class AppRole : IdentityRole<Guid>
+    public class AppRole : IdentityRole
     {
         public string Description { get; set; } = string.Empty;
-        public string Discriminator { get; set; } = string.Empty;
-        public ICollection<IdentityUserRole<Guid>> UserRoles { get; set; } = new List<IdentityUserRole<Guid>>();
+        public virtual ICollection<AppUserRole> UserRoles { get; set; }
     }
 }

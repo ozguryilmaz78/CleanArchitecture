@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Services;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
+using CleanArchitecture.Domain.Entities.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +9,10 @@ namespace CleanArchitecture.Application.Features.Auth.Role.GetAllRole
 {
     public class GetAllRoleQueryHandler : IRequestHandler<GetAllRoleQuery, Result<List<GetAllRoleQueryResponse>>>
     {
-        private readonly RoleManager<RoleDomain> _repository;
+        private readonly RoleManager<AppRole> _repository;
         private readonly IMapper _mapper;
 
-        public GetAllRoleQueryHandler(RoleManager<RoleDomain> repository, IMapper mapper)
+        public GetAllRoleQueryHandler(RoleManager<AppRole> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

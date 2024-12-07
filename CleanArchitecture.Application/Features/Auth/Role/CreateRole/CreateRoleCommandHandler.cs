@@ -1,16 +1,16 @@
 ﻿using CleanArchitecture.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
+using CleanArchitecture.Domain.Entities.Auth;
 
 
 namespace CleanArchitecture.Application.Features.Auth.Role.CreateRole
 {
     public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Result<CreateRoleCommandResponse>>
     {
-        private readonly RoleManager<RoleDomain> _repository;
+        private readonly RoleManager<AppRole> _repository;
 
-        public CreateRoleCommandHandler(RoleManager<RoleDomain> repository)
+        public CreateRoleCommandHandler(RoleManager<AppRole> repository)
         {
             _repository = repository;
         }
@@ -19,7 +19,7 @@ namespace CleanArchitecture.Application.Features.Auth.Role.CreateRole
         {
             var role = await _repository.RoleExistsAsync(request.Name);
             if (role == true) return Result<CreateRoleCommandResponse>.Failure("Bu isimde bir rol zaten mevcut.");
-            var newRole = new RoleDomain
+            var newRole = new AppRole
             {
                 Name = request.Name,
                 NormalizedName = request.Name.ToUpper(),

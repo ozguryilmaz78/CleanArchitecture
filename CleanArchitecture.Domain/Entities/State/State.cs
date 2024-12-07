@@ -1,10 +1,12 @@
-﻿using CleanArchitecture.Application.Services;
-using CleanArchitecture.Domain.Entities.State;
-using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Features.Auth.GetAll
+namespace CleanArchitecture.Domain.Entities.State
 {
-    public class GetAllQuery : IRequest<Result<List<GetAllQueryResponse>>>
+    public class State
     {
         public int PageNumber { get; set; } // Sayfa numarası
         public int PageSize { get; set; } // Sayfa başına kayıt sayısı

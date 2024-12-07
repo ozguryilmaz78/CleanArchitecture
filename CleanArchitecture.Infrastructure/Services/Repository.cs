@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities.State;
 using CleanArchitecture.Infrastructure.Context;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -118,5 +119,7 @@ namespace CleanArchitecture.Infrastructure.Services
         }
 
         #endregion
+
+
     }
 }

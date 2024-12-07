@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
+using CleanArchitecture.Domain.Entities.Auth;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities.Auth;
 using MediatR;
@@ -10,10 +10,10 @@ namespace CleanArchitecture.Application.Features.Auth.Role.AssignRole
     public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, Result<AssignRoleCommandResponse>>
     {
         private UserManager<AppUser> _userManager;
-        private RoleManager<RoleDomain> _roleManager;
+        private RoleManager<AppRole> _roleManager;
         private IMapper _mapper;
 
-        public AssignRoleCommandHandler(UserManager<AppUser> userManager, RoleManager<RoleDomain> roleManager, IRepository<AppUserRole> userRepository, IMapper mapper)
+        public AssignRoleCommandHandler(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IRepository<AppUserRole> userRepository, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -30,10 +30,8 @@ namespace CleanArchitecture.Application.Features.Auth.Role.AssignRole
             if (role == null)
                 return Result<AssignRoleCommandResponse>.Failure("Rol bulunamadı.");
 
-            // Kullanıcının mevcut rollerini kontrol etmek için rolu doğrudan UserManager'dan kontrol edin
-            if (await _userManager.IsInRoleAsync(user, role.Name))
-                return Result<AssignRoleCommandResponse>.Failure("Bu rol kullanıcıya önceden tanımlanmıştır.");
-
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
             // Role ekle
             var addToRoleResult = await _userManager.AddToRoleAsync(user, role.Name);
             if (!addToRoleResult.Succeeded)

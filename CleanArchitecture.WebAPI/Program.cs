@@ -14,6 +14,13 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
 builder.Services.AddSwaggerGen(setup =>
 {
     var jwtSecuritySheme = new OpenApiSecurityScheme
@@ -49,7 +56,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseCors();

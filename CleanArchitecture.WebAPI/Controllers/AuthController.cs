@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Features.Auth.ChangePassword;
+using CleanArchitecture.Application.Features.Auth.Delete;
 using CleanArchitecture.Application.Features.Auth.EmailConfirmation;
 using CleanArchitecture.Application.Features.Auth.EmailVerify;
 using CleanArchitecture.Application.Features.Auth.ForgotPassword;
@@ -12,6 +13,7 @@ using CleanArchitecture.Application.Features.Auth.Role.DeleteRole;
 using CleanArchitecture.Application.Features.Auth.Role.GetAllRole;
 using CleanArchitecture.Application.Features.Auth.Role.GetByIdRole;
 using CleanArchitecture.Application.Features.Auth.Role.UpdateRole;
+using CleanArchitecture.Application.Features.Auth.Update;
 using CleanArchitecture.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -50,7 +52,21 @@ namespace CleanArchitecture.WebAPI.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Delete(DeleteCommand request, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterCommand request, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
@@ -73,8 +89,8 @@ namespace CleanArchitecture.WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{token}")]
-        public async Task<IActionResult> EmailVerify([FromRoute] string token, CancellationToken cancellationToken)
+        [HttpGet()]
+        public async Task<IActionResult> EmailVerify([FromQuery] string token, CancellationToken cancellationToken)
         {
             var request = new EmailVerifyCommand
             {
@@ -85,8 +101,8 @@ namespace CleanArchitecture.WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{emailOrUserName}")]
-        public async Task<IActionResult> ForgotPassword([FromRoute] string emailOrUserName, CancellationToken cancellationToken)
+        [HttpGet()]
+        public async Task<IActionResult> ForgotPassword([FromQuery] string emailOrUserName, CancellationToken cancellationToken)
         {
             var request = new ForgotPasswordCommand
             {

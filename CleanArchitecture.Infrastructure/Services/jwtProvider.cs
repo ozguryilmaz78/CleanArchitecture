@@ -25,9 +25,11 @@ namespace CleanArchitecture.Infrastructure.Services
             List<Claim> claims = new()
             {
                 new Claim("Id", user.Id.ToString()),
-                new Claim("Name", user.FullName),
+                new Claim("Name", user.FullName ??""),
                 new Claim("Email", user.Email ?? ""),
-                new Claim("UserName", user.UserName ?? "")
+                new Claim("UserName", user.UserName ?? ""),
+                new Claim("PhotoUrl", user.PhotoUrl ?? ""),
+                new Claim("UserRole", user.UserRole ?? "")
             };
 
             DateTime expires = DateTime.UtcNow.AddMonths(1);

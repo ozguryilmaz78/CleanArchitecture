@@ -4,54 +4,47 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection.Emit;
 
 namespace CleanArchitecture.Infrastructure.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IUnitOfWork
+    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, string>, IUnitOfWork
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);  // Base class konfigurasyonunu çağır
+            base.OnModelCreating(builder);
 
-            builder.Ignore<IdentityUserLogin<Guid>>();
-            builder.Ignore<IdentityRoleClaim<Guid>>();
-            builder.Ignore<IdentityUserToken<Guid>>();
-            builder.Ignore<IdentityUserClaim<Guid>>();
+            builder.Ignore<IdentityUserClaim<string>>();
+            builder.Ignore<IdentityUserToken<string>>();
+            builder.Ignore<IdentityUserLogin<string>>();
+            builder.Ignore<IdentityRoleClaim<string>>();
 
-            // AppRole ve AppUser yapılandırmaları
-            builder.Entity<AppRole>()
-                .ToTable("AppRoles")
-                .Property(r => r.Description)
-                .IsRequired();
-
-            builder.Entity<AppUser>()
-                .ToTable("AppUsers")
-                .Property(u => u.FullName)
-                .IsRequired();
-
-            // AppUserRole için birleşik anahtar ve ilişkiler
-            builder.Entity<IdentityUserRole<Guid>>() // AppUserRole yerine IdentityUserRole<Guid> kullanıyoruz
-                .ToTable("AppUserRoles")
-                .HasKey(ur => new { ur.UserId, ur.RoleId }); // Birleşik anahtar
-
-            // UserRole ilişkilerini tanımlıyoruz
-            builder.Entity<IdentityUserRole<Guid>>() // IdentityUserRole<Guid> kullanıyoruz
-                .HasOne<AppUser>()
-                .WithMany(u => u.UserRoles) // AppUser'da UserRoles özelliği tanımlanmalı
+            builder.Entity<AppUser>(b =>
+            {
+                b.ToTable("AppUsers")
+                .HasMany(e => e.UserRoles)
+                .WithOne(e => e.User)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
+            });
 
-            builder.Entity<IdentityUserRole<Guid>>()
-                .HasOne<AppRole>()
-                .WithMany(r => r.UserRoles) // AppRole'de UserRoles özelliği tanımlanmalı
+            builder.Entity<AppRole>(b =>
+            {
+                b.ToTable("AppRoles")
+                .HasMany(e => e.UserRoles)
+                .WithOne(e => e.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
-        }
+            });
 
-        // AppUserRole yerine IdentityUserRole<Guid> tanımlandığından UserRoles DbSet'i kaldırıldı
+            builder.Entity<IdentityUserRole<string>>(b =>
+            {
+                b.ToTable("AppUserRoles");
+                b.HasKey(ur => new { ur.UserId, ur.RoleId });
+            });    
+        }
     }
 }

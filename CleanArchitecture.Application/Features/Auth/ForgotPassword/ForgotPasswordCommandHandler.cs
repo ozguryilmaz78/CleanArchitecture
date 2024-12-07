@@ -32,8 +32,9 @@ namespace CleanArchitecture.Application.Features.Auth.ForgotPassword
         {
             AppUser? user = await _userManager.Users
                          .FirstOrDefaultAsync(p =>
-                         p.UserName == request.EmailOrUserName ||
-                         p.Email == request.EmailOrUserName,
+                         (p.UserName == request.EmailOrUserName ||
+                         p.Email == request.EmailOrUserName) &&
+                         !p.IsDeleted,
                          cancellationToken);
 
             if (user is null)
@@ -53,7 +54,8 @@ namespace CleanArchitecture.Application.Features.Auth.ForgotPassword
             }
             var response = new ForgotPasswordCommandResponse
             {  UserName= user.UserName,
-               Password = newPassword
+               Password = newPassword,
+               Email= user.Email
             };
             await _emailService.SendEmailForgotPasswordAsync(user.Email, response);
             return Result<ForgotPasswordCommandResponse>.Succeed(response);

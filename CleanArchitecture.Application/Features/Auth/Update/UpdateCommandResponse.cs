@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.Features.Auth.Register
+﻿namespace CleanArchitecture.Application.Features.Auth.Update
 {
     public class UpdateCommandResponse
     {

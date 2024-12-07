@@ -45,7 +45,7 @@ namespace CleanArchitecture.Application.Features.Auth.ChangePassword
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                return Result<ChangePasswordCommandResponse>.Failure(400, $"Parola değiştirme başarısız: {errors}");
+                return Result<ChangePasswordCommandResponse>.Failure(400, $"{errors}");
             }
 
             var response = new ChangePasswordCommandResponse

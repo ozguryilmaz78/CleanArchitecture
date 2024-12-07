@@ -23,7 +23,7 @@ namespace CleanArchitecture.Application.Features.Auth.EmailVerify
             _repository.Update(user);
             var response = new EmailVerifyCommandResponse
             {
-                Message = "Kullanıcının maili onaylandı."
+                Message = "Email başarıyla onaylandı. Kullanıcı bilgileri ile giriş yapabilirsiniz."
             };
             return Result<EmailVerifyCommandResponse>.Succeed(response);
         }

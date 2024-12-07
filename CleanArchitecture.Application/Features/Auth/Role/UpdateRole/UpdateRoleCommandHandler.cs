@@ -2,16 +2,16 @@
 using CleanArchitecture.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
+using CleanArchitecture.Domain.Entities.Auth;
 
 namespace CleanArchitecture.Application.Features.Auth.Role.UpdateRole
 {
     public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Result<UpdateRoleCommandResponse>>
     {
-        private readonly RoleManager<RoleDomain> _repository;
+        private readonly RoleManager<AppRole> _repository;
         private readonly IMapper _mapper;
 
-        public UpdateRoleCommandHandler(RoleManager<RoleDomain> repository, IMapper mapper)
+        public UpdateRoleCommandHandler(RoleManager<AppRole> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

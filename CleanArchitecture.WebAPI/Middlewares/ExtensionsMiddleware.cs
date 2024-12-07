@@ -1,7 +1,6 @@
-﻿using CleanArchitecture.Application.Services;
-using CleanArchitecture.Domain.Entities.Auth;
+﻿using CleanArchitecture.Domain.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
-using RoleDomain = CleanArchitecture.Domain.Entities.Auth.AppRole;
+
 
 namespace CleanArchitecture.WebAPI.Middlewares
 {
@@ -9,22 +8,35 @@ namespace CleanArchitecture.WebAPI.Middlewares
     {
         public static async void CreateFirstUser(WebApplication app)
         {
+       
             using (var scoped = app.Services.CreateScope())
             {
                 var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<RoleDomain>>();
-
+                var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
                 if (!roleManager.Roles.Any(p => p.Name == "Admin"))
                 {
-                    RoleDomain role = new()
+                    var roles = new List<AppRole>
                     {
+                        new AppRole
+                        {
                         Name = "Admin",
                         NormalizedName = "ADMIN",
                         Description = "Yönetici",
                         ConcurrencyStamp = Guid.NewGuid().ToString()
+                        },
+                        new AppRole
+                        {
+                        Name = "User",
+                        NormalizedName = "USER",
+                        Description = "Kullanıcı",
+                        ConcurrencyStamp = Guid.NewGuid().ToString()
+                        }
                     };
 
-                    roleManager.CreateAsync(role).Wait();
+                    foreach (var role in roles)
+                    {
+                        roleManager.CreateAsync(role).Wait();
+                    }
                 }
 
                 if (!userManager.Users.Any(p => p.UserName == "admin"))
@@ -32,22 +44,26 @@ namespace CleanArchitecture.WebAPI.Middlewares
                     AppUser user = new()
                     {
                         UserName = "admin",
-                        Email = "admin@admin.com",
+                        Email = "admin@identity.com",
                         FirstName = "Admin",
-                        LastName = "AdminSurname",
-                        FullName = "Admin AdminSurname",
+                        LastName = "Yönetici",
+                        FullName = "Admin Yönetici",
                         EmailConfirmed = true,
                     };
 
-                    userManager.CreateAsync(user, "Oy12345**").Wait();
-                    AppUser? adminUser = await userManager.FindByNameAsync("Admin");
-                    if (adminUser != null)
+                    var result = await userManager.CreateAsync(user, "Admin2024*");
+                    if (result.Succeeded)
                     {
-                        await userManager.AddToRoleAsync(adminUser, "Admin");
+                        AppUser? adminUser = await userManager.FindByNameAsync("admin");
+                        if (adminUser != null)
+                        {
+                            userManager.AddToRoleAsync(adminUser, "Admin").Wait();
+                        }
                     }
                 }
 
             }
         }
+
     }
 }

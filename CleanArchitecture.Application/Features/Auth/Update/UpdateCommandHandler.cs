@@ -8,33 +8,31 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CleanArchitecture.Application.Features.Auth.Register
+namespace CleanArchitecture.Application.Features.Auth.Update
 {
-    public partial class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<UpdateCommandResponse>>
+    public partial class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result<UpdateCommandResponse>>
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailService _emailService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _environment;
         
 
-        public RegisterCommandHandler(
+        public UpdateCommandHandler(
             UserManager<AppUser> userManager,
             IJwtProvider jwtProvider,
-            IEmailService emailService,
             IConfiguration configuration,
             IHostingEnvironment environment)
         {
             _userManager = userManager;
-            _emailService = emailService;
             _jwtProvider = jwtProvider;
             _configuration = configuration;
             _environment = environment;
         }
 
-        public async Task<Result<UpdateCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UpdateCommandResponse>> Handle(UpdateCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -42,34 +40,25 @@ namespace CleanArchitecture.Application.Features.Auth.Register
                 var BackendUrl = _configuration["ManagementSettings:BackendUrl"];
                 AppUser? user = await _userManager.Users
                             .FirstOrDefaultAsync(p =>
-                            (p.UserName == request.UserName ||
-                            p.Email == request.Email) &&
-                            !p.IsDeleted,
+                            p.Id == request.Id,
                             cancellationToken);
 
-                if (user != null)
+                AppUser? existedUser = await _userManager.Users
+                    .FirstOrDefaultAsync(p =>
+                    (p.Email == request.Email ||
+                    p.UserName == request.UserName) &&
+                    p.Id != user.Id,
+                    cancellationToken);
+                if (existedUser != null)
                 {
                     return (500, "Kullanıcı adı veya email sistemde kayıtlı.");
                 }
 
-                user = new AppUser
-                {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    FullName = request.FirstName + " " + request.LastName,
-                    UserName = request.UserName,
-                    Email = request.Email
-                };
-
-                var emailResponse = await _jwtProvider.CreateEmailConfirmationToken(user);
-                user.EmailConfirmationCode = emailResponse.Token;
-                var result = await _userManager.CreateAsync(user, request.Password);
-
-                if (!result.Succeeded)
-                {
-                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                    return Result<UpdateCommandResponse>.Failure(500, $"Kayıt başarısız: {errors}");
-                }
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
+                user.FullName = request.FirstName + " " + request.LastName;
+                user.UserName = request.UserName;
+                user.Email = request.Email;
 
                 if (request.PhotoFile != null)
                 {
@@ -81,15 +70,13 @@ namespace CleanArchitecture.Application.Features.Auth.Register
                         request.PhotoFile.CopyTo(stream);
                     }
                     user.PhotoUrl = $"{BackendUrl}/{userImageFolder}/{fileName}";
-                    _userManager.UpdateAsync(user);
+                   
                 }
-
-
+                await _userManager.UpdateAsync(user);
                 var response = new UpdateCommandResponse
                 {
                     Id = user.Id.ToString()
                 };
-                await _emailService.SendEmailConfirmationAsync(request.Email, emailResponse.Token);
                 return Result<UpdateCommandResponse>.Succeed(response);
             }
             catch (Exception ex)

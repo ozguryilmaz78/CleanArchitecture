@@ -19,7 +19,7 @@ namespace CleanArchitecture.Application.Mapping
             CreateMap<AppUser, GetByIdQueryResponse>();
             CreateMap<AppUser, AssignRoleCommandResponse>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src));
-            CreateMap<IdentityUser, RegisterCommandResponse>();
+            CreateMap<IdentityUser, UpdateCommandResponse>();
             CreateMap<AppRole, GetAllRoleQueryResponse>();
             CreateMap<AppRole, GetByIdRoleQueryResponse>();
             CreateMap<AppRole, UpdateRoleCommandResponse>();

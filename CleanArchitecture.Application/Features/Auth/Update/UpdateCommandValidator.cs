@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace CleanArchitecture.Application.Features.Auth.Register
+namespace CleanArchitecture.Application.Features.Auth.Update
 {
-        public class UpdateCommandValidator : AbstractValidator<RegisterCommand>
+        public class UpdateCommandValidator : AbstractValidator<UpdateCommand>
         {
             public UpdateCommandValidator()
             {
@@ -15,9 +15,6 @@ namespace CleanArchitecture.Application.Features.Auth.Register
                 RuleFor(p => p.UserName)
                     .MinimumLength(1)
                     .WithMessage("Kullanıcı adı en az 1 karakter olmalıdır");
-                RuleFor(p => p.Password)
-                    .MinimumLength(1)
-                    .WithMessage("Şifre en az 1 karakter olmalıdır");
                 RuleFor(p => p.Email)
                     .MinimumLength(1)
                     .WithMessage("Eposta en az 1 karakter olmalıdır");

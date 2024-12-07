@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CleanArchitecture.Domain.Entities.State;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,5 +27,6 @@ namespace CleanArchitecture.Application.Services
         //Dapper
         Task<TEntity> GetByIdAsync(string id);
         Task<IEnumerable<TEntity>> GetAllAsync();
+
     }
 }
